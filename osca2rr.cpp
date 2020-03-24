@@ -25,4 +25,28 @@ int main()
 	cout<<"The time quantum for first round is 3.\n";
 	time_quan=3;
 	CurT=0;
-	for
+	for(Proc_no=0;RemProc!=0;)
+	{
+		if(remt[Proc_no]<=time_quan && remt[Proc_no]>0)
+		{
+			CurT+=remt[Proc_no];
+			remt[Proc_no]=0;
+			indicator=1;
+		}
+		else if(remt[Proc_no]>0)
+		{
+			remt[Proc_no]-=time_quan;
+			CurT+=time_quan;
+		}
+		if(remt[Proc_no]==0 && indicator==1)
+		{ cout<<Proc_no;
+			RemProc--;
+			cout<<Proc_no+1;
+			cout<<"\t\t\t"<<CurT-arT[Proc_no]<<endl;
+			cout<<"\t\t\t"<<CurT-bsT[Proc_no]-arT[Proc_no]<<endl;
+			wait+=CurT-arT[Proc_no]-bsT[Proc_no];
+			tut+=CurT-arT[Proc_no];
+			indicator=0;
+
+		}
+		if
