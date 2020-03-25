@@ -49,4 +49,32 @@ int main()
 			indicator=0;
 
 		}
-		if
+		if(Proc_no==no-1){
+			x++;
+			if(x==2){
+				Proc_no=0;
+				time_quan=6;
+
+				printf("The time quantum for second round is 6. \n");
+			}
+			else{
+				break;
+			}
+		}
+		else if(CurT >= arT[Proc_no+1]){
+			Proc_no++;
+		}
+		else{
+			Proc_no=0;
+		}
+	}
+
+	rr(no,remt,CurT,arT,bsT);
+
+	return 0;
+}
+
+void rr(int no,int remt[10],int Cur_t,int arT[10], int bsT[10]){
+
+	float avg_wait,avg_tut;
+	
