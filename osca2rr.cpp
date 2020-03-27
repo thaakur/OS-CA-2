@@ -116,4 +116,3 @@ int main()
 	cout<<"\n\n Average Trunaround time : "<<(avg_trunaround_time)/size<<endl;
 	cout<<" Average Waiting time : "<<(avg_waiting_time)/size<<endl;
 }
-
