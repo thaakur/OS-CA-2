@@ -1,131 +1,119 @@
 #include<stdio.h>
-#include<conio.h>
-
-void rr(int no,int remt[10],int Cur_t,int arT[10], int bsT[10]);
-
+#include<iostream>
+#include<stdlib.h>
+	int size,arival_time[100],bust_time[100],completion_time[100],waiting_time[100],trunaround_time[100],remanning_bt[100],total_time_quantam=0,read_queue[100];
+	double avg_trunaround_time=0,avg_waiting_time=0;
+    int current_time,Remening_proc=size,indicator,time_quantam_i1,time_quantam_i2,time_quantam_itration,remmaning_process;
 int main()
 {
-	int Proc_no,j,no,CurT,RemProc,indicator,time_quan,wait,tut,arT[10],bsT[10],remt[10],x=1;
-	indicator = 0;
-	wait = 0;
-	tut = 0;
-	printf("Enter number of processes ");
-	scanf("%d",&no);
-	RemProc = no;
-
-	printf("\nEnter the arrival time and burst time of the processes\n");
-	for(Proc_no = 0;Proc_no < no;Proc_no++)
-	{
-		printf("\nProcess P%d\n",Proc_no+1);
-		printf("Arrival time = ");
-		scanf("%d",&arT[Proc_no]);
-		printf("Burst time = ");
-		scanf("%d",&bsT[Proc_no]);
-		remt[Proc_no]=bsT[Proc_no];
+	using namespace std;
+    cout<<"Enter the number of process :";
+    cin>>size;
+    cout<<"\n\nEnter the arrival time and burst time of the processes\n";
+    for(int process_no=0;process_no<size;process_no++)
+    {
+    	cout<<"\nProcess P"<<process_no+1<<"\n";
+		cout<<"\tArrival time = ";
+		cin>>arival_time[process_no];
+		cout<<"\tBurst time = ";
+		cin>>bust_time[process_no];
+		remanning_bt[process_no]=bust_time[process_no];
+		total_time_quantam+=bust_time[process_no];
 	}
-	printf("The details of time quantum are as follows:\n");
-	printf("The time quantum for first round is 3.\n");
-	time_quan=3;
-	CurT=0;
-	for(Proc_no=0;RemProc!=0;)
+	system("CLS");
+	cout<<"The details of time quantum are as follows:\n";
+	cout<<"\nThe time quantum for first Itration is 3.\n";
+	cout<<"The time quantum for first Itration is 6.\n";
+	cout<<"After second itration the Shortest job will assign CPU.\n\n";
+	time_quantam_i1=3;
+	time_quantam_i2=6;
+	time_quantam_itration=1;
+	current_time=0;
+	remmaning_process=size;
+	for(int Process_no=0;Process_no<remmaning_process;Process_no++)
 	{
-		if(remt[Proc_no]<=time_quan && remt[Proc_no]>0)
+		if(remanning_bt[Process_no]<time_quantam_i1 && remanning_bt[Process_no]>=0&&current_time<9)
 		{
-			CurT+=remt[Proc_no];
-			remt[Proc_no]=0;
-			indicator=1;
+			current_time+=remanning_bt[Process_no];
+			remanning_bt[Process_no]=0;
+			indicator = 1;
+			time_quantam_itration++;
+			remmaning_process--;
 		}
-		else if(remt[Proc_no]>0)
+		else if(remanning_bt[Process_no]>0&&current_time<9)
 		{
-			remt[Proc_no]-=time_quan;
-			CurT+=time_quan;
+			if(time_quantam_itration==1)
+			{remanning_bt[Process_no]-=time_quantam_i1;
+			time_quantam_itration++;
+			current_time+=time_quantam_i1;}
+			else if(time_quantam_itration==2)
+			{remanning_bt[Process_no]-=time_quantam_i2;
+			current_time+=time_quantam_i2;}
 		}
-		if(remt[Proc_no]==0 && indicator==1)
-		{ printf("%d",Proc_no);
-			RemProc--;
-			printf("P %d",Proc_no+1);
-			printf("\t\t\t%d",CurT-arT[Proc_no]);
-			printf("\t\t\t%d\n",CurT-bsT[Proc_no]-arT[Proc_no]);
-			wait+=CurT-arT[Proc_no]-bsT[Proc_no];
-			tut+=CurT-arT[Proc_no];
-			indicator=0;
+		else if(remanning_bt[Process_no]<9 && remanning_bt[Process_no]>=3&&current_time<9)
+		{
+			current_time+=remanning_bt[Process_no];
+			remanning_bt[Process_no]=0;
+			remmaning_process--;
+			indicator = 1;
+		}
+		else if(remanning_bt[Process_no]>3&&current_time<9)
+		{
+			remanning_bt[Process_no]-=time_quantam_i2;
+			current_time+=time_quantam_i2;
+		}
+		if(remanning_bt[Process_no]==0 && indicator==1)
+		{
+			Remening_proc--;
+			completion_time[Process_no]=current_time;
+			cout<<completion_time[Process_no];
+			trunaround_time[Process_no]=completion_time[Process_no]-arival_time[Process_no];
+			waiting_time[Process_no]=trunaround_time[Process_no]-bust_time[Process_no];
+			indicator = 0;
 
 		}
-		if(Proc_no==no-1){
-			x++;
-			if(x==2){
-				Proc_no=0;
-				time_quan=6;
 
-				printf("The time quantum for second round is 6. \n");
+	}
+
+	for(int Process_no=0;Process_no<remmaning_process;Process_no++)
+	{
+		int min =remanning_bt[0];
+		int i = 0,j=0;
+	for (i; i < size; i++)
+    {
+        if (min > remanning_bt[i] && current_time>arival_time[i])
+			{
+				min = remanning_bt[i];
 			}
-			else{
-				break;
-			}
-		}
-		else if(CurT >= arT[Proc_no+1]){
-			Proc_no++;
-		}
-		else{
-			Proc_no=0;
+  	}
+
+    for (j; j < size; j++)
+    {
+    	if(remanning_bt[j]==min)
+    	break;
+   }
+    	if(current_time>arival_time[j] && min!=100000)
+    	{
+    		remanning_bt[j]=100000;
+			current_time+=min;
+			completion_time[j]=current_time;
+			trunaround_time[j]=completion_time[j]-arival_time[j];
+			waiting_time[j]=trunaround_time[j]-bust_time[j];
 		}
 	}
 
-	rr(no,remt,CurT,arT,bsT);
 
-	return 0;
+	cout<<"\nProcess\t\tArival time\tBurst time\tComplection time\tTurnaround Time\t\twaiting time";
+    for(int i=0;i<size;i++)
+    {
+        cout<<"\nP"<<i+1<<"\t\t"<<arival_time[i]<<"\t\t"<<bust_time[i]<<"\t\t"<<completion_time[i]<<"\t\t\t"<<trunaround_time[i]<<"\t\t\t"<<waiting_time[i];
+    }
+    for(int k=0;k<size;k++)
+    {
+    	avg_waiting_time+=waiting_time[k];
+    	avg_trunaround_time+=trunaround_time[k];
+	}
+	cout<<"\n\n Average Trunaround time : "<<(avg_trunaround_time)/size<<endl;
+	cout<<" Average Waiting time : "<<(avg_waiting_time)/size<<endl;
 }
 
-void rr(int no,int remt[10],int Cur_t,int arT[10], int bsT[10]){
-
-	float avg_wait,avg_tut;
-	int i,j,n=no,temp,btime[20],Proc_no[20],w_time[20],tut_t[20],total=0,loc;
-
-    printf("Third round with least burst time.\n");
-
-    for(i=0;i<n;i++)
-    {
-        btime[i]=remt[i];
-        w_time[i]=Cur_t-arT[i]-btime[i];
-		Proc_no[i]=i+1;
-    }
-
-    for(i=0;i<n;i++)
-    {
-        loc=i;
-        for(j=i+1;j<n;j++)
-        {
-            if(btime[j]<btime[loc]){
-            	loc=j;
-            }
-        }
-        temp=btime[i];
-        btime[i]=btime[loc];
-        btime[loc]=temp;
-        temp=Proc_no[i];
-        Proc_no[i]=Proc_no[loc];
-        Proc_no[loc]=temp;
-    }
-
-    for(i=1;i<n;i++)
-    {
-        for(j=0;j<i;j++){
-        	w_time[i]+=btime[j];
-        }
-        total+=w_time[i];
-    }
-
-    avg_wait=(float)total/n;
-    total=0;
-    printf("\nProcess\t\tBurst time\t\twaiting time\t\tTurnaround Time");
-    for(i=0;i<n;i++)
-    {
-        tut_t[i]=btime[i]+w_time[i];
-        total=total + tut_t[i];
-        printf("\nP%d\t\t\t%d\t\t\t%d\t\t\t%d",Proc_no[i],btime[i],w_time[i],tut_t[i]);
-    }
-    avg_tut=(float)total/n;
-    printf("\n\nAverage waiting time = %f",avg_wait);
-    printf("\n Average turnaround time = %f\n",avg_tut);
-
-}
