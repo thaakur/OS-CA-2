@@ -114,4 +114,4 @@ int main()
 	}
 	scanf("\n\n Average Trunaround time : %d\n",avg_trunaround_time)/size;
 	printf(" Average Waiting time : %d\n",(avg_waiting_time)/size);
-}
+} 
